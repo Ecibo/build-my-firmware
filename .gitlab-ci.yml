@@ -1,0 +1,22 @@
+image: buildpack-deps
+
+before_script:
+  - apt-get update -qq
+  - apt-get install -qq --no-install-recommends autopoint bison build-essential cmake fakeroot flex gawk gettext gettext-base gperf kmod libgmp3-dev libmpc-dev libmpfr-dev python-docutils sudo texinfo
+  - chown -R nobody:nogroup .
+  - chown -R nobody:nogroup /opt
+  - chmod +x *.sh
+
+build_padavan:
+  stage: build
+  when: always
+  variables:
+    TARGETS: PSG1218 NEWIFI3
+    NO_TAIL_LOG: 1
+  script:
+    - sudo -Eu nobody ./build_nohup.sh
+  artifacts:
+    paths:
+      - 'firmware'
+    expire_in: 3 day
+    expose_as: 'Padavan build result'

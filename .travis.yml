@@ -1,0 +1,21 @@
+dist: xenial
+language: c
+
+env:
+  global:
+    - SHARE_ARTIFACTS=1
+    - TARGETS='PSG1218 NEWIFI3'
+    - NO_TAIL_LOG=1
+
+before_script:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq --no-install-recommends autopoint cmake fakeroot gperf python-docutils texinfo
+  - sudo chmod o+w /opt
+  - chmod +x *.sh
+
+jobs:
+  include:
+    - stage: build
+      name: "Build firmware"
+      script:
+        - ./build_nohup.sh
